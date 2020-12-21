@@ -16,7 +16,7 @@ const part1 = (input) => {//this is literally part 2 solution except shittier an
 let testIn = [0,3,6];
 console.log(part1([...input]))
 
-const part2 = (input, turnCap) => {
+const part2Maps = (input, turnCap) => {
   let currentNumber = input[input.length - 1];
   let turn = input.length;
   let nextNumber = 0; //assumes starting numbers are unique
@@ -25,7 +25,14 @@ const part2 = (input, turnCap) => {
     history.set(number, turn + 1);
   });
 
+  let timer = 0;
+  console.time(`${timer}`)
   while(turn < turnCap){
+    if(turn % 1000000 === 0){
+      console.timeEnd(`${timer}`)
+      timer = timer + 1000000;
+      console.time(`${timer}`)
+    }
     turn += 1;
     currentNumber = nextNumber;
     let lastTurnCurrentNumberWasSpoken = history.get(currentNumber);
@@ -36,4 +43,34 @@ const part2 = (input, turnCap) => {
   return currentNumber
 }
 
-console.log(part2([...input], 30000000))
+const part2Objects = (input, turnCap) => {
+  let currentNumber = input[input.length - 1];
+  let turn = input.length;
+  let nextNumber = 0; //assumes starting numbers are unique
+  let history = {};
+  input.forEach((number, turn) => {
+    history[number] = turn + 1;
+  });
+
+  let timer = 0;
+  console.time(`${timer}`)
+  while(turn < turnCap){
+    if(turn % 1000000 === 0){
+      console.timeEnd(`${timer}`)
+      timer = timer + 1000000;
+      console.time(`${timer}`)
+    }
+    turn += 1;
+    currentNumber = nextNumber;
+    let lastTurnCurrentNumberWasSpoken = history[currentNumber];
+    nextNumber = lastTurnCurrentNumberWasSpoken ? turn - lastTurnCurrentNumberWasSpoken : 0;
+    history[currentNumber] = turn;
+  }
+
+  return currentNumber
+}
+
+
+console.log(part2Maps([...input], 30000000))
+
+console.log(part2Objects([...input], 30000000))
