@@ -12,7 +12,6 @@ const buildTree = (input) => {
       ruleTree[container] = {
         bagType: container,
         contains: [],
-        //containedBy: []
       };
     }
     containees.forEach(c => {
@@ -29,13 +28,8 @@ const buildTree = (input) => {
         ruleTree[bagType] = {
           bagType: bagType,
           contains: [],
-          //containedBy: []
         };
       };
-      // ruleTree[bagType].containedBy.push({
-      //   bagType: container,
-      //   count: count
-      // })
     })
   });
   return ruleTree;
