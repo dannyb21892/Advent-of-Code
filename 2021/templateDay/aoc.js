@@ -9,3 +9,9 @@ const problem = (input) => {
 }
 
 console.log(problem(input))
+
+const problem2 = (input) => {
+
+}
+
+console.log(problem2(input))
