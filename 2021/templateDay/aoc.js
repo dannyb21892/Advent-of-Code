@@ -5,7 +5,7 @@ const filePath = import.meta.url;
 getInputforDay(input, filePath)
 
 const problem = (input) => {
-
+  let lines = input.split('\n').filter(x=>x);
 }
 
 console.log(problem(input))
