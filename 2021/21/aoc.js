@@ -2,7 +2,7 @@ import { input } from './input.js';
 import { getInputforDay } from '../../get-input.js';
 const filePath = import.meta.url;
 
-let newInput = [4,5]
+let newInput = [4,8]
 
 getInputforDay(input, filePath)
 
@@ -53,6 +53,82 @@ const problem = (input) => {
 console.log(problem(newInput))
 
 const problem2 = (p1Start, p2Start) => {
+  let p1 = {
+    posScoreFreq: [{}],
+  }
+  let p2 = {
+    posScoreFreq: [{}],
+  };
+  //in game round 0 at position p1Start, p1 has a score of 0 in 1 game
+  p1.posScoreFreq[0][p1Start] = {0:1};
+  p2.posScoreFreq[0][p2Start] = {0:1};
+
+  let p1Wins = 0;
+  let p2Wins = 0;
+  let round = 0;
+  //all 27 universes that split from every roll
+  let rollFreqs = {3:1, 4:3, 5:6, 6:7, 7:6, 8:3, 9:1};
+  while(true){
+    round++;
+    p1.posScoreFreq[round] = {};
+    let allGamesDone = true;
+    Object.entries(rollFreqs).forEach(([roll, rfreq]) => {
+      roll = Number(roll);
+      Object.entries(p1.posScoreFreq[round - 1]).forEach(([pos, scorefreq]) => {
+        pos = Number(pos);
+        let newPos = ((pos + roll) > 10) ? (pos + roll - 10) : pos + roll;
+        p1.posScoreFreq[round][newPos] = p1.posScoreFreq[round][newPos] || {};
+        let ongoingGames = Object.entries(scorefreq).filter(([score, sfreq]) => Number(score) < 21);
+        allGamesDone = allGamesDone && (ongoingGames.length === 0);
+        ongoingGames.forEach(([score, sfreq]) => {
+          let newScore = Number(score) + newPos;
+          let scoreFreq = (rfreq * sfreq) + (p1.posScoreFreq[round][newPos][newScore] || 0);
+          p1.posScoreFreq[round][newPos][newScore] = scoreFreq;
+          if(newScore >= 21){
+            p1Wins += scoreFreq;
+          }
+        })
+      });
+    });
+    if(allGamesDone) {
+      console.log('p1 finished all their games on round ', round)
+      break;
+    }
+
+    allGamesDone = false;
+    p2.posScoreFreq[round] = {};
+    Object.entries(rollFreqs).forEach(([roll, rfreq]) => {
+      roll = Number(roll);
+      Object.entries(p2.posScoreFreq[round - 1]).forEach(([pos, scorefreq]) => {
+        pos = Number(pos);
+        let newPos = ((pos + roll) > 10) ? (pos + roll - 10) : pos + roll;
+        p2.posScoreFreq[round][newPos] = p2.posScoreFreq[round][newPos] || {};
+        let ongoingGames = Object.entries(scorefreq).filter(([score, sfreq]) => Number(score) < 21);
+        allGamesDone = allGamesDone && (ongoingGames.length === 0);
+        ongoingGames.forEach(([score, sfreq]) => {
+          let newScore = Number(score) + newPos;
+          let scoreFreq = (rfreq * sfreq) + (p2.posScoreFreq[round][newPos][newScore] || 0);
+          p2.posScoreFreq[round][newPos][newScore] = scoreFreq;
+          if(newScore >= 21){
+            p2Wins += scoreFreq;
+          }
+        })
+      })
+    });
+    if(allGamesDone) {
+      console.log('p2 finished all their games on round ', round)
+      break;
+    }
+
+    console.log(JSON.stringify(p2, null, 4))
+  }
+  console.log()
+  return Math.max(p1Wins, p2Wins)
+}
+
+// console.log(problem2(...newInput))
+
+const problem2alt = (p1Start, p2Start) => {
   let round = 0;
   let ongoingGames = {0: {}};
   ongoingGames[round][encodeKey(p1Start, p2Start, 0, 0)] = 1;
@@ -118,4 +194,4 @@ function decodeKey(key) {
   }
 }
 
-console.log(problem2(...newInput))
+console.log(problem2alt(...newInput))
