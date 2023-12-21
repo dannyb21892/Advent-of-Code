@@ -1,5 +1,8 @@
-const input = require('./input').input;
-const test = require('./input').test;
+import { input } from './input.js';
+import { getInputforDay } from '../../get-input.js';
+const filePath = import.meta.url;
+
+getInputforDay(input, filePath)
 
 const problem = (input) => {
   const rows = input.split('\n').map(Number);
@@ -17,7 +20,7 @@ const problem = (input) => {
 const problem2 = input => {
   const rows = input.split('\n').map(Number);
   const range = [];
-  count = 0;
+  let count = 0;
   rows.forEach((x,i) => {
     if(i > 2) {
       const old = range.reduce((a,b) => a+b,0);

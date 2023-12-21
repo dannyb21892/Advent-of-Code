@@ -9,7 +9,8 @@ const getInput = (day, year) => {
     method: 'get',
     headers: {
       'Content-Type': 'text/plain',
-      Cookie: 'session=53616c7465645f5f33bc11f64b60174a7a53c460daf7d9c23b2303292f9b7d788869de7d62024e8cb92bbae196fda9a6',
+      //replace cookie with a real one stolen from network tab
+      Cookie: 'session=53616c7465645f5fde980c15263e290bc8fcfec30edcc8dc7637003defd4cb5b84f7fb49e3db47a29d650f969cf60f964949eab5aa6e099e1059cd187244b52b',
       'User-Agent': USER_AGENT
     }
   }
